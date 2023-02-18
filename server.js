@@ -1,7 +1,10 @@
 const inquirer = require('inquirer');
+//import and require mysql2
+const mysql = require('mysql2');
 const fs = require('fs');
 
-inquirer
+inquirer;
+server.js
   .prompt([
     {
       type: 'input',
