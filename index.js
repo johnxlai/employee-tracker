@@ -3,29 +3,27 @@ const inquirer = require('inquirer');
 const mysql = require('mysql2');
 const fs = require('fs');
 
-inquirer;
-server.js
+inquirer
   .prompt([
-    {
-      type: 'input',
-      name: 'logoName',
-      message: 'Please enter text, must not be more than 3 letters',
-    },
-    {
-      type: 'input',
-      name: 'textColour',
-      message: `Please enter text colour keyword or a hexadecimal number for the logo's test color`,
-    },
-    {
-      type: 'input',
-      name: 'logoColour',
-      message: `Please enter a colour keyword or a hexadecimal number for the logo's background colour`,
-    },
+    // {
+    //   type: 'input',
+    //   name: 'logoName',
+    //   message: 'Please enter text, must not be more than 3 letters',
+    // },
+
     {
       type: 'list',
-      name: 'logoShape',
-      message: `Please choose logo shape`,
-      choices: ['triangle', 'circle', 'square'],
+      name: 'likeToDo',
+      message: `What would you like to do`,
+      choices: [
+        'view all departments',
+        'view all roles',
+        'view all employees',
+        'add a department',
+        'add a role',
+        'add an employee',
+        'update an employee role',
+      ],
     },
   ])
   .then((data) => {
