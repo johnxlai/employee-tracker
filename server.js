@@ -21,6 +21,9 @@ const cTable = require('console.table');
 // ----  ---
 // foo   10
 // bar   20
+const displayAllDepartment = () => {
+  console.table();
+};
 
 inquirer
   .prompt([
