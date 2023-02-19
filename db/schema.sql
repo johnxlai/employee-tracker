@@ -14,7 +14,7 @@ CREATE TABLE role (
   department_id INT,
   FOREIGN KEY (department_id)
   REFERENCES department(id)
-);s
+);
 
 CREATE TABLE employee (
    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
