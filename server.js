@@ -1,7 +1,26 @@
 const inquirer = require('inquirer');
+const express = require('express');
 //import and require mysql2
 const mysql = require('mysql2');
 const fs = require('fs');
+
+// call once somewhere in the beginning of the app
+const cTable = require('console.table');
+// console.table([
+//   {
+//     name: 'foo',
+//     age: 10
+//   }, {
+//     name: 'bar',
+//     age: 20
+//   }
+// ]);
+
+// prints
+// name  age
+// ----  ---
+// foo   10
+// bar   20
 
 inquirer
   .prompt([
