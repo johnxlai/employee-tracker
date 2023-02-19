@@ -1,5 +1,5 @@
 const inquirer = require('inquirer');
-const express = require('express');
+// const express = require('express');
 //import and require mysql2
 const mysql = require('mysql2');
 const fs = require('fs');
@@ -46,6 +46,20 @@ inquirer
     },
   ])
   .then((data) => {
+    console.log(data);
+    if (data.likeToDo === 'view all departments') {
+      console.log('test');
+      console.table([
+        {
+          name: 'foo',
+          age: 10,
+        },
+        {
+          name: 'bar',
+          age: 20,
+        },
+      ]);
+    }
     // const svgPath = './dist/logo.svg';
     // const finalLogo = makeShape(data);
     //Generate the svg logo here.
