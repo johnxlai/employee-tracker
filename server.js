@@ -91,7 +91,7 @@ inquirer
     }
 
     if (data.likeToDo === 'view all roles') {
-      db.query(``, (err, result) => {
+      db.query(`SELECT * FROM role;`, (err, result) => {
         if (err) {
           console.log(err);
         }
@@ -100,7 +100,7 @@ inquirer
     }
 
     if (data.likeToDo === 'view all employees') {
-      db.query(``, (err, result) => {
+      db.query(`SELECT * FROM employees`, (err, result) => {
         if (err) {
           console.log(err);
         }

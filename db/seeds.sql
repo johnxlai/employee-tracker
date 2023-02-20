@@ -5,17 +5,17 @@ VALUES  ("Sales"),
         ("Development"),
         ("Customer Service");
 
-INSERT INTO role ( title, department_id )
-VALUES  ("Software Dev" , 4),
-        ("Marketing Manager" , 3),
-        ("Project Manager" , 3),
-        ("Art Director" , 2),
-        ("Copy Writer" , 2),
-        ("Sales Manager" , 1),
-        ("Sales Rep" , 1),
-        ("Front End Developers" , 4),
-        ("Software Developer" , 4),
-        ("Backend Developer" , 4);
+INSERT INTO role ( title, salary, department_id )
+VALUES  ("Software Dev" , 123.123, 4),
+        ("Marketing Manager" ,123.123, 3),
+        ("Project Manager" ,123.123, 3),
+        ("Art Director" ,123.123, 2),
+        ("Copy Writer" ,123.123, 2),
+        ("Sales Manager" ,123.123, 1),
+        ("Sales Rep" ,123.123, 1),
+        ("Front End Developers" ,123.123, 4),
+        ("Software Developer" ,123.123, 4),
+        ("Backend Developer" ,123.123, 4);
 
 INSERT INTO employee ( first_name, last_name, role_id, manager_id)
 VALUES  ("John", "Lai", 9, 1),
