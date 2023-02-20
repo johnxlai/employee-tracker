@@ -20,10 +20,12 @@
 
 
 
--- SELECT department.department_id AS ID, department.department_name AS Name;
--- FROM departments;
+
+-- SELECT department.id AS id, department_name AS department
+--       FROM department;
+
+-- SELECT  title AS department,
+-- FROM role;
 
 
-SELECT
-  department.department_id AS id, department.department_name AS department;
-
+SELECT * FROM role;

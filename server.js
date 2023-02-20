@@ -83,7 +83,7 @@ inquirer
     // console.log(data);
     if (data.likeToDo === 'view all departments') {
       // id names
-      const department = `SELECT department.id AS id, department_name AS department
+      const department = `SELECT department.id AS id, name AS department
       FROM department;`;
       db.query(department, (err, result) => {
         if (err) {
@@ -95,7 +95,9 @@ inquirer
 
     if (data.likeToDo === 'view all roles') {
       // id title department salary
-      db.query(`SELECT * FROM role;`, (err, result) => {
+      const queryStatement = `SELECT role.id AS id, role.title AS title, role.department_id AS department, role.salary AS salary
+      FROM role;`;
+      db.query(queryStatement, (err, result) => {
         if (err) {
           console.log(err);
         }
