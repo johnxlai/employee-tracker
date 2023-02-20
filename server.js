@@ -81,13 +81,32 @@ inquirer
   ])
   .then((data) => {
     // console.log(data);
-    db.query(`SELECT * FROM department`, (err, result) => {
-      if (err) {
-        console.log(err);
-      }
-      console.table(result);
-    });
+    if (data.likeToDo === 'view all departments') {
+      db.query(`SELECT * FROM department`, (err, result) => {
+        if (err) {
+          console.log(err);
+        }
+        console.table(result);
+      });
+    }
 
+    if (data.likeToDo === 'view all roles') {
+      db.query(``, (err, result) => {
+        if (err) {
+          console.log(err);
+        }
+        console.table(result);
+      });
+    }
+
+    if (data.likeToDo === 'view all employees') {
+      db.query(``, (err, result) => {
+        if (err) {
+          console.log(err);
+        }
+        console.table(result);
+      });
+    }
     // db.query(`SELECT * FROM department`, [{ test: 'test' }], function (err) {});
     // if (data.likeToDo === 'view all departments') {
     //   // Query database
