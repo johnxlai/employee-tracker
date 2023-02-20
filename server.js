@@ -82,7 +82,10 @@ inquirer
   .then((data) => {
     // console.log(data);
     if (data.likeToDo === 'view all departments') {
-      db.query(`SELECT * FROM department`, (err, result) => {
+      // id names
+      const department = `SELECT department.id AS id, department_name AS department
+      FROM department;`;
+      db.query(department, (err, result) => {
         if (err) {
           console.log(err);
         }
@@ -91,6 +94,7 @@ inquirer
     }
 
     if (data.likeToDo === 'view all roles') {
+      // id title department salary
       db.query(`SELECT * FROM role;`, (err, result) => {
         if (err) {
           console.log(err);
@@ -100,6 +104,7 @@ inquirer
     }
 
     if (data.likeToDo === 'view all employees') {
+      // id first name last_name title deparment salay manager
       db.query(`SELECT * FROM employees`, (err, result) => {
         if (err) {
           console.log(err);
@@ -107,7 +112,11 @@ inquirer
         console.table(result);
       });
     }
-    // db.query(`SELECT * FROM department`, [{ test: 'test' }], function (err) {});
+
+    // Add department
+    // Add role
+    // add employee
+    // // db.query(`SELECT * FROM department`, [{ test: 'test' }], function (err) {});
     // if (data.likeToDo === 'view all departments') {
     //   // Query database
     //   // let deletedRow = 2;
