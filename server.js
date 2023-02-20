@@ -1,11 +1,31 @@
 const inquirer = require('inquirer');
-// const express = require('express');
+const express = require('express');
+
 //import and require mysql2
 const mysql = require('mysql2');
 const fs = require('fs');
 
+// const PORT = process.env.PORT || 3001;s
+
+// Express middleware
+// app.use(express.urlencoded({ extended: false }));
+// app.use(express.json());
+
 // call once somewhere in the beginning of the app
 const cTable = require('console.table');
+
+const db = mysql.createConnection(
+  {
+    host: 'localhost',
+    // MySQL username,
+    user: 'root',
+    // TODO: Add MySQL password here
+    password: 'killbear',
+    database: 'employee_tracker_db',
+  },
+  console.log(`Connected to the movies_db database.`)
+);
+
 // console.table([
 //   {
 //     name: 'foo',
@@ -21,9 +41,20 @@ const cTable = require('console.table');
 // ----  ---
 // foo   10
 // bar   20
-const displayAllDepartment = () => {
-  console.table();
-};
+// const displayAllDepartment = () => {
+//   const sql = `SELECT * FROM department`;
+//   const params = [body.movie_name];
+//   db.query(sql, (err, result) => {
+//     if (err) {
+//       res.status(400).json({ error: err.message });
+//       return res;
+//     }
+//     res.json({
+//       message: 'success',
+//       data: body,
+//     });
+//   });
+// };
 
 inquirer
   .prompt([
@@ -49,21 +80,20 @@ inquirer
     },
   ])
   .then((data) => {
-    console.log(data);
-    if (data.likeToDo === 'view all departments') {
-      console.log('test');
-      console.table([
-        {
-          name: 'foo',
-          age: 10,
-        },
-        {
-          name: 'bar',
-          age: 20,
-        },
-      ]);
-    }
-    // const svgPath = './dist/logo.svg';
+    // console.log(data);
+    db.query(`SELECT * FROM department`, (err, result) => {
+      if (err) {
+        console.log(err);
+      }
+      console.table(result);
+    });
+
+    // db.query(`SELECT * FROM department`, [{ test: 'test' }], function (err) {});
+    // if (data.likeToDo === 'view all departments') {
+    //   // Query database
+    //   // let deletedRow = 2;
+    // }
+    // const svgPath = './dist/logo.svg';s
     // const finalLogo = makeShape(data);
     //Generate the svg logo here.
     // fs.writeFile(svgPath, generateSvg(finalLogo), (err) =>
