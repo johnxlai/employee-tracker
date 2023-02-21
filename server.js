@@ -128,21 +128,6 @@ function askQuestion() {
       if (data.likeToDo === 'quit') {
         process.exit();
       }
-
-      // Add department
-      // Add role
-      // add employee
-      // // db.query(`SELECT * FROM department`, [{ test: 'test' }], function (err) {});
-      // if (data.likeToDo === 'view all departments') {
-      //   // Query database
-      //   // let deletedRow = 2;
-      // }
-      // const svgPath = './dist/logo.svg';s
-      // const finalLogo = makeShape(data);
-      //Generate the svg logo here.
-      // fs.writeFile(svgPath, generateSvg(finalLogo), (err) =>
-      //   err ? console.error(err) : console.log('Generated logo.svg')
-      // );
     })
     .catch((err) => console.error(err));
 }
