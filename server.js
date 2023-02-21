@@ -54,6 +54,7 @@ inquirer
         'add a role',
         'add an employee',
         'update an employee role',
+        'quit',
       ],
     },
   ])
@@ -95,6 +96,16 @@ inquirer
         }
         console.table(result);
       });
+    }
+    if (data.likeToDo === 'add a department') {
+    }
+    if (data.likeToDo === 'add a role') {
+    }
+    if (data.likeToDo === 'add an employee') {
+    }
+    if (data.likeToDo === 'update an employee role') {
+    }
+    if (data.likeToDo === 'quit') {
     }
 
     // Add department
