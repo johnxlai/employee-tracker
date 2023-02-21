@@ -60,9 +60,9 @@ function askQuestion() {
       // console.log(data);
       if (data.likeToDo === 'view all departments') {
         // id names
-        const department = `SELECT department.id AS id, name AS department
+        const queryStatement = `SELECT department.id AS id, name AS department
       FROM department;`;
-        db.query(department, (err, result) => {
+        db.query(queryStatement, (err, result) => {
           if (err) {
             console.log(err);
           }
