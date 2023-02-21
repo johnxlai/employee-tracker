@@ -84,8 +84,12 @@ inquirer
     }
 
     if (data.likeToDo === 'view all employees') {
-      // id first name last_name title deparment salay manager
-      db.query(`SELECT * FROM employees`, (err, result) => {
+      const queryStatement = `SELECT employee.id AS id, first_name,  last_name, role.title AS title, department.name AS department, salary, employee.manager_id as Manager
+      FROM (( employee
+      INNER JOIN role ON employee.role_id = role.id)
+      INNER JOIN department ON role.department_id = department.id);`;
+      // id first name last_name title deparment salary manager name
+      db.query(queryStatement, (err, result) => {
         if (err) {
           console.log(err);
         }
