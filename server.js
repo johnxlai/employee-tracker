@@ -115,6 +115,8 @@ inquirer
       //add last name
       //What is the employees role
       //what is the employee's manager (none is an option)
+      //       SELECT * FROM employee
+      // WHERE employee.manager_id IS NULL;
     }
     if (data.likeToDo === 'update an employee role') {
       //Q  which employee do you want to update?
@@ -124,6 +126,7 @@ inquirer
       //Updated employee role
     }
     if (data.likeToDo === 'quit') {
+      process.exit();
     }
 
     // Add department
