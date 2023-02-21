@@ -98,12 +98,27 @@ inquirer
       });
     }
     if (data.likeToDo === 'add a department') {
+      // prompt user to enter what is the name of the department
+      //ADDED what to the database
     }
     if (data.likeToDo === 'add a role') {
+      // prompt user to enter new role
+      //salary of the role
+      //which department does the role belong to?
+      //return ADDED role name in the database
     }
     if (data.likeToDo === 'add an employee') {
+      //add first name
+      //add last name
+      //What is the employees role
+      //what is the employee's manager (none is an option)
     }
     if (data.likeToDo === 'update an employee role') {
+      //Q  which employee do you want to update?
+      //select any employee (list of all the employee)
+      //Q What role dp ypi waamt tp assign the selected employee?
+      //list of all the role
+      //Updated employee role
     }
     if (data.likeToDo === 'quit') {
     }
