@@ -3,6 +3,7 @@ const inquirer = require('inquirer');
 //import and require mysql2
 const mysql = require('mysql2');
 const fs = require('fs');
+require('dotenv').config();
 
 // call once somewhere in the beginning of the app
 const cTable = require('console.table');
@@ -11,10 +12,10 @@ const db = mysql.createConnection(
   {
     host: 'localhost',
     // MySQL username,
-    user: 'root',
+    user: process.env.DB_USER,
     // TODO: Add MySQL password here
-    password: 'killbear',
-    database: 'employee_tracker_db',
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
   },
   console.log(`Connected to the movies_db database.`)
 );
