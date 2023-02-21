@@ -1,15 +1,8 @@
 const inquirer = require('inquirer');
-const express = require('express');
 
 //import and require mysql2
 const mysql = require('mysql2');
 const fs = require('fs');
-
-// const PORT = process.env.PORT || 3001;s
-
-// Express middleware
-// app.use(express.urlencoded({ extended: false }));
-// app.use(express.json());
 
 // call once somewhere in the beginning of the app
 const cTable = require('console.table');
@@ -26,21 +19,6 @@ const db = mysql.createConnection(
   console.log(`Connected to the movies_db database.`)
 );
 
-// console.table([
-//   {
-//     name: 'foo',
-//     age: 10
-//   }, {
-//     name: 'bar',
-//     age: 20
-//   }
-// ]);
-
-// prints
-// name  age
-// ----  ---
-// foo   10
-// bar   20
 // const displayAllDepartment = () => {
 //   const sql = `SELECT * FROM department`;
 //   const params = [body.movie_name];
