@@ -28,4 +28,6 @@
 -- SELECT CONCAT(first_name, " ", last_name) AS name
 -- FROM employee;
 
-SELECT title FROM role;
+-- SELECT title FROM role;
+
+SELECT first_name, last_name FROM employee;
