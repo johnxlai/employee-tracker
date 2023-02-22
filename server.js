@@ -101,14 +101,42 @@ function askQuestion() {
         });
       }
       if (data.likeToDo === 'add a department') {
+        const question = [
+          {
+            type: 'input',
+            name: 'addDepartment',
+            message: `What is the name of the department`,
+          },
+        ];
         // prompt user to enter what is the name of the department
+        inquirer.prompt(question).then((data) => {});
         //ADDED what to the database
       }
       if (data.likeToDo === 'add a role') {
         // prompt user to enter new role
-        //salary of the role
-        //which department does the role belong to?
-        //return ADDED role name in the database
+
+        const question = [
+          {
+            type: 'input',
+            name: 'addRole',
+            message: `What is the name of the Role`,
+          },
+          //salary of the role
+          {
+            type: 'input',
+            name: 'addSalary',
+            message: `Please add the salary of the role`,
+          },
+          //which department does the role belong to?
+          {
+            type: 'input',
+            name: 'whichDepartment',
+            message: `which department does the role belong to?`,
+          },
+        ];
+        inquirer.prompt(question).then((data) => {
+          //return ADDED role name in the database
+        });
       }
       if (data.likeToDo === 'add an employee') {
         //add first name
