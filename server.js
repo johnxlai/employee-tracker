@@ -139,20 +139,66 @@ function askQuestion() {
         });
       }
       if (data.likeToDo === 'add an employee') {
-        //add first name
-        //add last name
-        //What is the employees role
-        //what is the employee's manager (none is an option)
-        //       SELECT * FROM employee
-        // WHERE employee.manager_id IS NULL;
+        const question = [
+          {
+            type: 'input',
+            name: 'addFirstName',
+            message: `What is the first name?`,
+          },
+          //salary of the role
+          {
+            type: 'input',
+            name: 'addLastName',
+            message: `What is the first name?`,
+          },
+          //What is the employees role
+          {
+            type: 'input',
+            name: 'employeesRole',
+            message: `What is the employee's role?`,
+          },
+          //who is the employee's manager (none is an option)
+          {
+            type: 'input',
+            name: 'employeesManager',
+            message: `Who is the employee's manager?`,
+          },
+        ];
+        inquirer.prompt(question).then((data) => {
+          //return employ added
+          //       SELECT * FROM employee
+          // WHERE employee.manager_id IS NULL;
+        });
       }
       if (data.likeToDo === 'update an employee role') {
-        //Q  which employee do you want to update?
-        //select any employee (list of all the employee)
-        //Q What role dp ypi waamt tp assign the selected employee?
-        //list of all the role
-        //Updated employee role
-      }
+        const question = [
+          {
+            type: 'list',
+            name: 'whichEmployee',
+            message: `Which employee's role do you want to update`,
+            choices: [
+              'view all departments',
+              //this needs to be a list of all employees full name
+            ],
+          },
+          //Q Which role do you want to assign him/her to?
+          {
+            type: 'list',
+            name: 'updateRole',
+            message: `Which employee's role do you want to update`,
+            choices: [
+              //this needs to be a list of all available roles
+              //list of all the role
+            ],
+          },
+        ];
+        inquirer.prompt(question).then((data) => {
+          //Return Updated employee role
+          //       SELECT * FROM employee
+          // WHERE employee.manager_id IS NULL;
+        });
+
+      //If user click exits
       if (data.likeToDo === 'quit') {
         process.exit();
       }
