@@ -59,8 +59,8 @@ function askQuestion(isStartUp) {
 
         case 'view all employees':
           viewAll(`SELECT employee.id, employee.first_name, employee.last_name, role.title AS title, department.name AS department, salary, CONCAT(manager.first_name , " ", manager.last_name) as Manager
-      FROM employee
-    INNER JOIN role ON employee.role_id = role.id
+          FROM employee
+      INNER JOIN role ON employee.role_id = role.id
     INNER JOIN department ON role.department_id = department.id
     LEFT JOIN employee manager ON employee.manager_id = manager.id
     ORDER BY id;`);
@@ -122,12 +122,11 @@ function addDepartment() {
   });
 }
 function addRole() {
-  let departmentNameArr;
   db.query(`SELECT * FROM department`, (err, result) => {
     if (err) {
       console.log(err);
     }
-    departmentNameArr = result.map(({ id, name }) => {
+    const departmentNameArr = result.map(({ id, name }) => {
       return { name, value: id };
     });
 
@@ -164,8 +163,32 @@ function addRole() {
     });
   });
 }
+async function addEmployee() {
+  let roleArr, managerList;
 
-function addEmployee() {
+  db.query(`SELECT title FROM role`, async (err, result) => {
+    // if (err) {
+    //   console.log(err);
+    // }
+
+    roleArr = await result.map(({ title } = result) => {
+      return title;
+      // return { name, value: id };
+    });
+  });
+
+  const queryStatement = `SELECT first_name, last_name FROM employee
+      WHERE employee.manager_id IS NULL;`;
+
+  db.query(queryStatement, (err, result) => {
+    console.log(({ first_name, last_name } = result));
+    managerList = result.map(({ managerName } = result) => {
+      return managerName;
+    });
+  });
+
+  // console.log(managerList);
+
   const question = [
     {
       type: 'input',
@@ -175,22 +198,26 @@ function addEmployee() {
     {
       type: 'input',
       name: 'last_name',
-      message: `What is the first name?`,
+      message: `What is the last name?`,
     },
     //What is the employees role
     {
-      type: 'input',
+      type: 'list',
       name: 'role_id',
       message: `What is the employee's role?`,
+      choices: roleArr,
     },
-    //who is the employee's manager (none is an option)
+    // who is the employee's manager (none is an option)
     {
-      type: 'input',
+      type: 'list',
       name: 'employeesManager',
       message: `Who is the employee's manager?`,
+      choices: managerList,
     },
   ];
-  inquirer.prompt(question).then((data) => {
+  inquirer.prompt(question).then(({ first_name, last_name } = data) => {
+    console.info(`Added ${first_name} ${last_name} to the database`);
+
     askQuestion();
     //return employ added
     //       SELECT * FROM employee
