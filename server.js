@@ -110,7 +110,18 @@ function askQuestion() {
         ];
         // prompt user to enter what is the name of the department
         inquirer.prompt(question).then((data) => {
+          console.log(({ addDepartment } = data));
+
+          const queryStatement = `INSERT INTO department(name)
+          Values (${addDepartment})
+          `;
+          db.query(queryStatement, (err, result) => {
+            if (err) {
+              console.log(err);
+            }
+            console.info(`Added ${addDepartment} to the database`);
             askQuestion();
+          });
         });
         //ADDED what to the database
       }
@@ -203,9 +214,10 @@ function askQuestion() {
           // WHERE employee.manager_id IS NULL;
         });
 
-      //If user click exits
-      if (data.likeToDo === 'quit') {
-        process.exit();
+        //If user click exits
+        if (data.likeToDo === 'quit') {
+          process.exit();
+        }
       }
     })
     .catch((err) => console.error(err));
