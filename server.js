@@ -130,8 +130,7 @@ function addRole() {
     departmentNameArr = result.map(({ id, name }) => {
       return { name, value: id };
     });
-    // console.log(result.map((el) => el.name));
-    // prompt user to enter new role
+
     const question = [
       {
         type: 'input',
@@ -153,15 +152,15 @@ function addRole() {
       },
     ];
     inquirer.prompt(question).then((data) => {
+      console.log(data);
       const queryStatement = `INSERT INTO role SET ?`;
       db.query(queryStatement, data, (err, result) => {
         if (err) {
           console.log(err);
         }
-        console.info(`Added to the database`);
+        console.info(`Added ${data.title} the database`);
         askQuestion();
       });
-      //return ADDED role name in the database
     });
   });
 }
@@ -170,19 +169,18 @@ function addEmployee() {
   const question = [
     {
       type: 'input',
-      name: 'addFirstName',
+      name: 'first_name',
       message: `What is the first name?`,
     },
-    //salary of the role
     {
       type: 'input',
-      name: 'addLastName',
+      name: 'last_name',
       message: `What is the first name?`,
     },
     //What is the employees role
     {
       type: 'input',
-      name: 'employeesRole',
+      name: 'role_id',
       message: `What is the employee's role?`,
     },
     //who is the employee's manager (none is an option)
