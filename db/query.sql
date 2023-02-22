@@ -19,6 +19,11 @@
 -- WHERE employee.manager_id IS NULL;
 -- SELECT * FROM department
 
-INSERT INTO department(name)
-Values ('MET HO')
+-- INSERT INTO department(name)
+-- Values ('MET HO')
 -- SELECT * FROM department;
+
+-- INSERT INTO role(title,salary,)
+
+SELECT CONCAT(first_name, " ", last_name) AS name
+FROM employee;
