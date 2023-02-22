@@ -109,7 +109,9 @@ function askQuestion() {
           },
         ];
         // prompt user to enter what is the name of the department
-        inquirer.prompt(question).then((data) => {});
+        inquirer.prompt(question).then((data) => {
+            askQuestion();
+        });
         //ADDED what to the database
       }
       if (data.likeToDo === 'add a role') {
@@ -136,6 +138,7 @@ function askQuestion() {
         ];
         inquirer.prompt(question).then((data) => {
           //return ADDED role name in the database
+          askQuestion();
         });
       }
       if (data.likeToDo === 'add an employee') {
@@ -165,6 +168,7 @@ function askQuestion() {
           },
         ];
         inquirer.prompt(question).then((data) => {
+          askQuestion();
           //return employ added
           //       SELECT * FROM employee
           // WHERE employee.manager_id IS NULL;
@@ -193,6 +197,7 @@ function askQuestion() {
           },
         ];
         inquirer.prompt(question).then((data) => {
+          askQuestion();
           //Return Updated employee role
           //       SELECT * FROM employee
           // WHERE employee.manager_id IS NULL;
