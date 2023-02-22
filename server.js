@@ -2,7 +2,6 @@ const inquirer = require('inquirer');
 
 //import and require mysql2
 const mysql = require('mysql2');
-const fs = require('fs');
 require('dotenv').config();
 
 // call once somewhere in the beginning of the app
@@ -19,21 +18,6 @@ const db = mysql.createConnection(
   },
   console.log(`Connected to the employee tracker db.`)
 );
-
-// const displayAllDepartment = () => {
-//   const sql = `SELECT * FROM department`;
-//   const params = [body.movie_name];
-//   db.query(sql, (err, result) => {
-//     if (err) {
-//       res.status(400).json({ error: err.message });
-//       return res;
-//     }
-//     res.json({
-//       message: 'success',
-//       data: body,
-//     });
-//   });
-// };
 
 const questions = [
   {
@@ -110,8 +94,6 @@ function askQuestion() {
         ];
         // prompt user to enter what is the name of the department
         inquirer.prompt(question).then(({ addDepartment } = data) => {
-          console.log(addDepartment);
-
           const queryStatement = `INSERT INTO department(name)
           Values ('${addDepartment}');
           `;
@@ -127,7 +109,6 @@ function askQuestion() {
       }
       if (data.likeToDo === 'add a role') {
         // prompt user to enter new role
-
         const question = [
           {
             type: 'input',
@@ -147,10 +128,23 @@ function askQuestion() {
             message: `which department does the role belong to?`,
           },
         ];
-        inquirer.prompt(question).then((data) => {
-          //return ADDED role name in the database
-          askQuestion();
-        });
+        inquirer
+          .prompt(question)
+          .then(({ addRole, addSalary, WhichDepartment } = data) => {
+            const queryStatement = `INSERT INTO department(name)
+          Values ('${addDepartment}');
+          `;
+            db.query(queryStatement, (err, result) => {
+              if (err) {
+                console.log(err);
+              }
+              console.info(`Added ${addDepartment} to the database`);
+              askQuestion();
+            });
+            //return ADDED role name in the database
+
+            askQuestion();
+          });
       }
       if (data.likeToDo === 'add an employee') {
         const question = [
