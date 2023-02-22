@@ -109,11 +109,11 @@ function askQuestion() {
           },
         ];
         // prompt user to enter what is the name of the department
-        inquirer.prompt(question).then((data) => {
-          console.log(({ addDepartment } = data));
+        inquirer.prompt(question).then(({ addDepartment } = data) => {
+          console.log(addDepartment);
 
           const queryStatement = `INSERT INTO department(name)
-          Values (${addDepartment})
+          Values ('${addDepartment}');
           `;
           db.query(queryStatement, (err, result) => {
             if (err) {

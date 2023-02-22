@@ -17,3 +17,8 @@
 
 -- SELECT * FROM employee
 -- WHERE employee.manager_id IS NULL;
+-- SELECT * FROM department
+
+INSERT INTO department(name)
+Values ('MET HO')
+-- SELECT * FROM department;
