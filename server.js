@@ -127,6 +127,7 @@ function addRole() {
       console.log(err);
     }
     const departmentNameArr = result.map(({ id, name }) => {
+      console.log(id, name);
       return { name, value: id };
     });
 
@@ -174,18 +175,21 @@ async function addEmployee() {
     // return { name, value: id };
   });
 
-  // const queryStatement = `SELECT first_name, last_name FROM employee
-  //     WHERE employee.manager_id IS NULL;`;
+  const managers = await db
+    .promise()
+    .query(
+      `SELECT first_name, last_name FROM employee WHERE employee.manager_id IS NULL`
+    );
+  console.log(managers[0]);
 
-  // const managers = await db.promise().query(queryStatement, (err, result) => {
-  //   console.log(({ first_name, last_name } = result));
-  //   managerList = result.map(({ managerName } = result) => {
-  //     return managerName;
-  //   });
-  // });
+  //Only need the first array that gets return from the promise
+  managerList = managers[0].map(
+    ({ first_name: first, last_name: last } = manager) => {
+      return `${first} ${last}`;
+    }
+  );
 
-  // console.log(managerList);
-
+  console.log(managerList);
   const question = [
     {
       type: 'input',
@@ -205,12 +209,12 @@ async function addEmployee() {
       choices: roleArr,
     },
     // who is the employee's manager (none is an option)
-    // {
-    //   type: 'list',
-    //   name: 'employeesManager',
-    //   message: `Who is the employee's manager?`,
-    //   choices: managerList,
-    // },
+    {
+      type: 'list',
+      name: 'employeesManager',
+      message: `Who is the employee's manager?`,
+      choices: managerList,
+    },
   ];
   inquirer.prompt(question).then(({ first_name, last_name } = data) => {
     console.info(`Added ${first_name} ${last_name} to the database`);
