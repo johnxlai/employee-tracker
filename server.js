@@ -182,12 +182,11 @@ async function addEmployee() {
   //Only need the first array that gets return from the promise
   managerList = managers[0].map(
     ({ first_name: first, last_name: last, id } = manager) => {
-      console.log({ name: `${first} ${last}`, value: id });
-
       return { name: `${first} ${last}`, value: id };
     }
   );
-  managerList.push({ name: 'Null', value: '' });
+  //Add None an option
+  managerList.push({ name: 'None', value: null });
 
   const question = [
     {
@@ -215,38 +214,22 @@ async function addEmployee() {
       choices: managerList,
     },
   ];
-  inquirer
-    .prompt(question)
-    .then(({ first_name, last_name, role_id, manager_id } = data) => {
-      console.log({ first_name, last_name, role_id, manager_id });
-      // const queryStatement = `INSERT INTO employee SET ?`;
-      // db.query(queryStatement, data, (err, result) => {
-      //   if (err) {
-      //     console.log(err);
-      //   }
-      //   // console.info(`Added ${data.title} the database`);
-      //   // let newEmployee = { first_name, last_name, manager_id };
-
-      //   // console.log(newEmployee);
-
-      //   // db.query();
-      //   // db.promise()
-      //   //   .query('SELECT id, title FROM role WHERE title = ?')
-      //   //   .then((rows) => {
-      //   //     console.log(rows);
-      //   //     // ... use the result ...
-      //   //   });
-
-      //   //role title needs to be convert to role ID
-
-      //   // manager name needs to be convert to manager ID
-      // });
-
-      // console.info(`Added ${first_name} ${last_name} to the database`);
+  inquirer.prompt(question).then((data) => {
+    // console.log({ first_name, last_name, role_id, manager_id });
+    const queryStatement = `INSERT INTO employee SET ?`;
+    db.query(queryStatement, data, (err, result) => {
+      if (err) {
+        console.log(err);
+      }
+      console.info(
+        `Added ${data.first_name} ${data.last_name} to the database`
+      );
 
       askQuestion();
     });
+  });
 }
+
 function updateEmployeeRole() {
   const queryStatement = `SELECT id, first_name, last_name FROM employee`;
 
