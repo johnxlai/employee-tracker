@@ -59,8 +59,8 @@ function askQuestion(isStartUp) {
 
         case 'view all employees':
           viewAll(`SELECT employee.id, employee.first_name, employee.last_name, role.title AS title, department.name AS department, salary, CONCAT(manager.first_name , " ", manager.last_name) as Manager
-      FROM employee
-    INNER JOIN role ON employee.role_id = role.id
+          FROM employee
+      INNER JOIN role ON employee.role_id = role.id
     INNER JOIN department ON role.department_id = department.id
     LEFT JOIN employee manager ON employee.manager_id = manager.id
     ORDER BY id;`);
@@ -122,12 +122,12 @@ function addDepartment() {
   });
 }
 function addRole() {
-  let departmentNameArr;
   db.query(`SELECT * FROM department`, (err, result) => {
     if (err) {
       console.log(err);
     }
-    departmentNameArr = result.map(({ id, name }) => {
+    const departmentNameArr = result.map(({ id, name }) => {
+      console.log(id, name);
       return { name, value: id };
     });
 
@@ -152,7 +152,6 @@ function addRole() {
       },
     ];
     inquirer.prompt(question).then((data) => {
-      console.log(data);
       const queryStatement = `INSERT INTO role SET ?`;
       db.query(queryStatement, data, (err, result) => {
         if (err) {
@@ -165,7 +164,31 @@ function addRole() {
   });
 }
 
-function addEmployee() {
+async function addEmployee() {
+  let roleArr, managerList;
+
+  const roles = await db.promise().query(`SELECT title, id FROM role`);
+  //Only need the first array that gets return from the promise
+  roleArr = roles[0].map(({ title, id } = role) => {
+    return { name: title, value: id };
+  });
+
+  const managers = await db
+    .promise()
+    .query(
+      `SELECT first_name, last_name, id FROM employee WHERE employee.manager_id IS NULL`
+    );
+
+  //Only need the first array that gets return from the promise
+  managerList = managers[0].map(
+    ({ first_name: first, last_name: last, id } = manager) => {
+      console.log({ name: `${first} ${last}`, value: id });
+
+      return { name: `${first} ${last}`, value: id };
+    }
+  );
+  managerList.push({ name: 'Null', value: '' });
+
   const question = [
     {
       type: 'input',
@@ -175,29 +198,83 @@ function addEmployee() {
     {
       type: 'input',
       name: 'last_name',
-      message: `What is the first name?`,
+      message: `What is the last name?`,
     },
     //What is the employees role
     {
-      type: 'input',
+      type: 'list',
       name: 'role_id',
       message: `What is the employee's role?`,
+      choices: roleArr,
     },
-    //who is the employee's manager (none is an option)
+    // who is the employee's manager (none is an option)
     {
-      type: 'input',
-      name: 'employeesManager',
+      type: 'list',
+      name: 'manager_id',
       message: `Who is the employee's manager?`,
+      choices: managerList,
     },
   ];
-  inquirer.prompt(question).then((data) => {
-    askQuestion();
-    //return employ added
-    //       SELECT * FROM employee
-    // WHERE employee.manager_id IS NULL;
-  });
+  inquirer
+    .prompt(question)
+    .then(({ first_name, last_name, role_id, manager_id } = data) => {
+      console.log({ first_name, last_name, role_id, manager_id });
+      // const queryStatement = `INSERT INTO employee SET ?`;
+      // db.query(queryStatement, data, (err, result) => {
+      //   if (err) {
+      //     console.log(err);
+      //   }
+      //   // console.info(`Added ${data.title} the database`);
+      //   // let newEmployee = { first_name, last_name, manager_id };
+
+      //   // console.log(newEmployee);
+
+      //   // db.query();
+      //   // db.promise()
+      //   //   .query('SELECT id, title FROM role WHERE title = ?')
+      //   //   .then((rows) => {
+      //   //     console.log(rows);
+      //   //     // ... use the result ...
+      //   //   });
+
+      //   //role title needs to be convert to role ID
+
+      //   // manager name needs to be convert to manager ID
+      // });
+
+      // console.info(`Added ${first_name} ${last_name} to the database`);
+
+      askQuestion();
+    });
 }
 function updateEmployeeRole() {
+  const queryStatement = `SELECT id, first_name, last_name FROM employee`;
+
+  db.query(queryStatement, (err, result) => {
+    // console.log(result);
+    employeeList = result.map(({ id, first_name, last_name } = employee) => {
+      return `${id} : ${first_name} ${last_name}`;
+    });
+
+    const question = [
+      {
+        type: 'list',
+        name: 'employee_id',
+        message: `Which employee's role do you want to update`,
+        choices: employeeList,
+      },
+    ];
+    inquirer.prompt(question).then((data) => {
+      console.log(data);
+      const queryStatement = `SELECT id, first_name, last_name FROM employee`;
+      db.query(queryStatement, (err, result) => {});
+      // askQuestion();
+      //Return Updated employee role
+      //       SELECT * FROM employee
+      // WHERE employee.manager_id IS NULL;
+    });
+  });
+
   const question = [
     {
       type: 'list',

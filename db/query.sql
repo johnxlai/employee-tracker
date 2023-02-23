@@ -25,5 +25,21 @@
 
 -- INSERT INTO role(title,salary,)
 
-SELECT CONCAT(first_name, " ", last_name) AS name
-FROM employee;
+-- SELECT CONCAT(first_name, " ", last_name) AS name
+-- FROM employee;
+
+-- SELECT title FROM role;
+
+-- SELECT first_name, last_name FROM employee;
+
+-- UPDATE employee
+-- SET role_id = value1
+-- WHERE condition;
+
+-- SELECT id, title FROM role
+-- WHERE title = "Advertising Manager"
+
+SELECT id, CONCAT(first_name, " " ,last_name) as name
+FROM employee
+WHERE first_name = "Tom" and last_name = 'Hanks' ;
+-- WHERE employee.name = "Thor Smith"
