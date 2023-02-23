@@ -173,19 +173,19 @@ async function addEmployee() {
     return { name: title, value: id };
   });
 
-  const managers = await db
-    .promise()
-    .query(
-      `SELECT first_name, last_name, id FROM employee WHERE employee.manager_id IS NULL`
-    );
+  // const managers = await db
+  //   .promise()
+  //   .query(
+  //     `SELECT first_name, last_name, id FROM employee WHERE employee.manager_id IS NULL`
+  //   );
 
-  //Only need the first array that gets return from the promise
-  managerList = managers[0].map(
-    ({ first_name: first, last_name: last } = manager) => {
-      return `${first} ${last}`;
-    }
-  );
-  managerList.push('Null');
+  // //Only need the first array that gets return from the promise
+  // managerList = managers[0].map(
+  //   ({ first_name: first, last_name: last } = manager) => {
+  //     return `${first} ${last}`;
+  //   }
+  // );
+  // managerList.push('Null');
 
   const question = [
     {
@@ -206,45 +206,16 @@ async function addEmployee() {
       choices: roleArr,
     },
     // who is the employee's manager (none is an option)
-    {
-      type: 'list',
-      name: 'manager_name',
-      message: `Who is the employee's manager?`,
-      choices: managerList,
-    },
+    // {
+    //   type: 'list',
+    //   name: 'manager_name',
+    //   message: `Who is the employee's manager?`,
+    //   choices: managerList,
+    // },
   ];
   inquirer
     .prompt(question)
-    .then(({ first_name, last_name, role_name, manager_name } = data) => {
-      console.log(first_name, last_name, role_name, manager_name);
-
-      let roleId, managerId;
-
-      async function blah() {
-        await db
-          .promise()
-          .query(`SELECT id, title FROM role WHERE title = '${role_name}'`)
-          .then((role) => {
-            roleId = 5;
-            // newEmployee = { role: role[0][0].id };
-          });
-        console.log(`roleId `);
-      }
-      blah();
-
-      const [managerFirst, managerLast] = manager_name.split(' ');
-      console.log(managerFirst, managerLast);
-      db.promise()
-        .query(
-          `SELECT id, first_name,last_name FROM employee
-            WHERE first_name = "${managerFirst}" and last_name = "${managerLast}"`
-        )
-        .then((data) => {
-          managerId = data[0][0].id;
-        });
-
-      console.log(`managerId ${managerId}`);
-
+    .then(({ first_name, last_name, role_id } = data) => {
       // const queryStatement = `INSERT INTO employee SET ?`;
       // db.query(queryStatement, data, (err, result) => {
       //   if (err) {
