@@ -30,4 +30,8 @@
 
 -- SELECT title FROM role;
 
-SELECT first_name, last_name FROM employee;
+-- SELECT first_name, last_name FROM employee;
+
+UPDATE employee
+SET role_id = value1
+WHERE condition;

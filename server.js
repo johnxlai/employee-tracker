@@ -163,29 +163,26 @@ function addRole() {
     });
   });
 }
+
 async function addEmployee() {
   let roleArr, managerList;
 
-  await db.query(`SELECT title FROM role`, (err, result) => {
-    // if (err) {
-    //   console.log(err);
-    // }
-
-    const roleArr = result.map(({ title } = result) => {
-      return title;
-      // return { name, value: id };
-    });
+  const roles = await db.promise().query(`SELECT title FROM role`);
+  //Only need the first array that gets return from the promise
+  roleArr = roles[0].map(({ title } = role) => {
+    return title;
+    // return { name, value: id };
   });
 
-  const queryStatement = `SELECT first_name, last_name FROM employee
-      WHERE employee.manager_id IS NULL;`;
+  // const queryStatement = `SELECT first_name, last_name FROM employee
+  //     WHERE employee.manager_id IS NULL;`;
 
-  db.query(queryStatement, (err, result) => {
-    console.log(({ first_name, last_name } = result));
-    managerList = result.map(({ managerName } = result) => {
-      return managerName;
-    });
-  });
+  // const managers = await db.promise().query(queryStatement, (err, result) => {
+  //   console.log(({ first_name, last_name } = result));
+  //   managerList = result.map(({ managerName } = result) => {
+  //     return managerName;
+  //   });
+  // });
 
   // console.log(managerList);
 
@@ -208,12 +205,12 @@ async function addEmployee() {
       choices: roleArr,
     },
     // who is the employee's manager (none is an option)
-    {
-      type: 'list',
-      name: 'employeesManager',
-      message: `Who is the employee's manager?`,
-      choices: managerList,
-    },
+    // {
+    //   type: 'list',
+    //   name: 'employeesManager',
+    //   message: `Who is the employee's manager?`,
+    //   choices: managerList,
+    // },
   ];
   inquirer.prompt(question).then(({ first_name, last_name } = data) => {
     console.info(`Added ${first_name} ${last_name} to the database`);
@@ -225,24 +222,27 @@ async function addEmployee() {
   });
 }
 function updateEmployeeRole() {
-  const queryStatement = `SELECT first_name, last_name FROM employee`;
+  const queryStatement = `SELECT id, first_name, last_name FROM employee`;
 
   db.query(queryStatement, (err, result) => {
     // console.log(result);
-    employeeList = result.map(({ first_name, last_name } = employee) => {
-      return `${first_name} ${last_name}`;
+    employeeList = result.map(({ id, first_name, last_name } = employee) => {
+      return `${id} : ${first_name} ${last_name}`;
     });
 
     const question = [
       {
         type: 'list',
-        name: 'whichEmployee',
+        name: 'employee_id',
         message: `Which employee's role do you want to update`,
         choices: employeeList,
       },
     ];
     inquirer.prompt(question).then((data) => {
-      askQuestion();
+      console.log(data);
+      const queryStatement = `SELECT id, first_name, last_name FROM employee`;
+      db.query(queryStatement, (err, result) => {});
+      // askQuestion();
       //Return Updated employee role
       //       SELECT * FROM employee
       // WHERE employee.manager_id IS NULL;
