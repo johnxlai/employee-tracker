@@ -167,16 +167,16 @@ function addRole() {
 async function addEmployee() {
   let roleArr, managerList;
 
-  const roles = await db.promise().query(`SELECT title FROM role`);
+  const roles = await db.promise().query(`SELECT title, id FROM role`);
   //Only need the first array that gets return from the promise
-  roleArr = roles[0].map(({ title } = role) => {
-    return `${title}`;
+  roleArr = roles[0].map(({ title, id } = role) => {
+    return { name: title, value: id };
   });
 
   const managers = await db
     .promise()
     .query(
-      `SELECT first_name, last_name FROM employee WHERE employee.manager_id IS NULL`
+      `SELECT first_name, last_name, id FROM employee WHERE employee.manager_id IS NULL`
     );
 
   //Only need the first array that gets return from the promise
@@ -219,13 +219,18 @@ async function addEmployee() {
       console.log(first_name, last_name, role_name, manager_name);
 
       let roleId, managerId;
-      db.promise()
-        .query(`SELECT id, title FROM role WHERE title = '${role_name}'`)
-        .then((role) => {
-          roleId = role[0][0].id;
-          // newEmployee = { role: role[0][0].id };
-        });
-      console.log(`roleId ${roleId}`);
+
+      async function blah() {
+        await db
+          .promise()
+          .query(`SELECT id, title FROM role WHERE title = '${role_name}'`)
+          .then((role) => {
+            roleId = 5;
+            // newEmployee = { role: role[0][0].id };
+          });
+        console.log(`roleId `);
+      }
+      blah();
 
       const [managerFirst, managerLast] = manager_name.split(' ');
       console.log(managerFirst, managerLast);
