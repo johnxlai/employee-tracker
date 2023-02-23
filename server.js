@@ -173,19 +173,21 @@ async function addEmployee() {
     return { name: title, value: id };
   });
 
-  // const managers = await db
-  //   .promise()
-  //   .query(
-  //     `SELECT first_name, last_name, id FROM employee WHERE employee.manager_id IS NULL`
-  //   );
+  const managers = await db
+    .promise()
+    .query(
+      `SELECT first_name, last_name, id FROM employee WHERE employee.manager_id IS NULL`
+    );
 
-  // //Only need the first array that gets return from the promise
-  // managerList = managers[0].map(
-  //   ({ first_name: first, last_name: last } = manager) => {
-  //     return `${first} ${last}`;
-  //   }
-  // );
-  // managerList.push('Null');
+  //Only need the first array that gets return from the promise
+  managerList = managers[0].map(
+    ({ first_name: first, last_name: last, id } = manager) => {
+      console.log({ name: `${first} ${last}`, value: id });
+
+      return { name: `${first} ${last}`, value: id };
+    }
+  );
+  managerList.push({ name: 'Null', value: '' });
 
   const question = [
     {
@@ -201,21 +203,22 @@ async function addEmployee() {
     //What is the employees role
     {
       type: 'list',
-      name: 'role_name',
+      name: 'role_id',
       message: `What is the employee's role?`,
       choices: roleArr,
     },
     // who is the employee's manager (none is an option)
-    // {
-    //   type: 'list',
-    //   name: 'manager_name',
-    //   message: `Who is the employee's manager?`,
-    //   choices: managerList,
-    // },
+    {
+      type: 'list',
+      name: 'manager_id',
+      message: `Who is the employee's manager?`,
+      choices: managerList,
+    },
   ];
   inquirer
     .prompt(question)
-    .then(({ first_name, last_name, role_id } = data) => {
+    .then(({ first_name, last_name, role_id, manager_id } = data) => {
+      console.log({ first_name, last_name, role_id, manager_id });
       // const queryStatement = `INSERT INTO employee SET ?`;
       // db.query(queryStatement, data, (err, result) => {
       //   if (err) {
