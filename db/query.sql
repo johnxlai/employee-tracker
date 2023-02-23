@@ -36,5 +36,10 @@
 -- SET role_id = value1
 -- WHERE condition;
 
-SELECT id, title FROM role
-WHERE title = "Advertising Manager"
+-- SELECT id, title FROM role
+-- WHERE title = "Advertising Manager"
+
+SELECT id, CONCAT(first_name, " " ,last_name) as name
+FROM employee
+WHERE first_name = "Tom" and last_name = 'Hanks' ;
+-- WHERE employee.name = "Thor Smith"

@@ -178,7 +178,6 @@ async function addEmployee() {
     .query(
       `SELECT first_name, last_name FROM employee WHERE employee.manager_id IS NULL`
     );
-  console.log(managers[0]);
 
   //Only need the first array that gets return from the promise
   managerList = managers[0].map(
@@ -188,7 +187,6 @@ async function addEmployee() {
   );
   managerList.push('Null');
 
-  console.log(managerList);
   const question = [
     {
       type: 'input',
@@ -215,42 +213,60 @@ async function addEmployee() {
       choices: managerList,
     },
   ];
-  inquirer.prompt(question).then((data) => {
-    db.promise()
-      .query(`SELECT id, title FROM role WHERE title = '${role_name}'`)
-      .then((role) => {
-        console.log(role[0][0].id);
-        // newEmployee = { role: role[0][0].id };
-      });
+  inquirer
+    .prompt(question)
+    .then(({ first_name, last_name, role_name, manager_name } = data) => {
+      console.log(first_name, last_name, role_name, manager_name);
 
-    const queryStatement = `INSERT INTO employee SET ?`;
-    db.query(queryStatement, data, (err, result) => {
-      if (err) {
-        console.log(err);
-      }
-      console.info(({ first_name, last_name, role_name, manager_name } = data));
-      // console.info(`Added ${data.title} the database`);
-      // let newEmployee = { first_name, last_name, manager_id };
+      let roleId, managerId;
+      db.promise()
+        .query(`SELECT id, title FROM role WHERE title = '${role_name}'`)
+        .then((role) => {
+          roleId = role[0][0].id;
+          // newEmployee = { role: role[0][0].id };
+        });
+      console.log(`roleId ${roleId}`);
 
-      // console.log(newEmployee);
+      const [managerFirst, managerLast] = manager_name.split(' ');
+      console.log(managerFirst, managerLast);
+      db.promise()
+        .query(
+          `SELECT id, first_name,last_name FROM employee
+            WHERE first_name = "${managerFirst}" and last_name = "${managerLast}"`
+        )
+        .then((data) => {
+          managerId = data[0][0].id;
+        });
 
-      // db.query();
-      // db.promise()
-      //   .query('SELECT id, title FROM role WHERE title = ?')
-      //   .then((rows) => {
-      //     console.log(rows);
-      //     // ... use the result ...
-      //   });
+      console.log(`managerId ${managerId}`);
 
-      //role title needs to be convert to role ID
+      // const queryStatement = `INSERT INTO employee SET ?`;
+      // db.query(queryStatement, data, (err, result) => {
+      //   if (err) {
+      //     console.log(err);
+      //   }
+      //   // console.info(`Added ${data.title} the database`);
+      //   // let newEmployee = { first_name, last_name, manager_id };
 
-      // manager name needs to be convert to manager ID
+      //   // console.log(newEmployee);
+
+      //   // db.query();
+      //   // db.promise()
+      //   //   .query('SELECT id, title FROM role WHERE title = ?')
+      //   //   .then((rows) => {
+      //   //     console.log(rows);
+      //   //     // ... use the result ...
+      //   //   });
+
+      //   //role title needs to be convert to role ID
+
+      //   // manager name needs to be convert to manager ID
+      // });
+
+      // console.info(`Added ${first_name} ${last_name} to the database`);
+
+      askQuestion();
     });
-
-    // console.info(`Added ${first_name} ${last_name} to the database`);
-
-    askQuestion();
-  });
 }
 function updateEmployeeRole() {
   const queryStatement = `SELECT id, first_name, last_name FROM employee`;
