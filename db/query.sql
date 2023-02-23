@@ -32,6 +32,9 @@
 
 -- SELECT first_name, last_name FROM employee;
 
-UPDATE employee
-SET role_id = value1
-WHERE condition;
+-- UPDATE employee
+-- SET role_id = value1
+-- WHERE condition;
+
+SELECT id, title FROM role
+WHERE title = "Advertising Manager"
