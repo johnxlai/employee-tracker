@@ -230,61 +230,78 @@ async function addEmployee() {
   });
 }
 
-function updateEmployeeRole() {
+async function updateEmployeeRole() {
   const queryStatement = `SELECT id, first_name, last_name FROM employee`;
 
-  db.query(queryStatement, (err, result) => {
-    // console.log(result);
-    employeeList = result.map(({ id, first_name, last_name } = employee) => {
-      return `${id} : ${first_name} ${last_name}`;
-    });
+  let employeeList, roleList;
 
-    const question = [
-      {
-        type: 'list',
-        name: 'employee_id',
-        message: `Which employee's role do you want to update`,
-        choices: employeeList,
-      },
-    ];
-    inquirer.prompt(question).then((data) => {
-      console.log(data);
-      const queryStatement = `SELECT id, first_name, last_name FROM employee`;
-      db.query(queryStatement, (err, result) => {});
-      // askQuestion();
-      //Return Updated employee role
-      //       SELECT * FROM employee
-      // WHERE employee.manager_id IS NULL;
-    });
+  const employees = await db.promise().query(queryStatement);
+
+  employeeList = employees[0].map(
+    ({ id, first_name, last_name } = employee) => {
+      return { name: `${first_name} ${last_name}`, value: id };
+    }
+  );
+
+  const roles = await db.promise().query(`SELECT title, id FROM role`);
+
+  roleList = roles[0].map(({ title, id }) => {
+    return { name: title, value: id };
   });
 
   const question = [
+    //this needs to be a list of all employees
     {
       type: 'list',
-      name: 'whichEmployee',
+      name: 'employee_id',
       message: `Which employee's role do you want to update`,
-      choices: [
-        'view all departments',
-        //this needs to be a list of all employees full name
-      ],
+      choices: employeeList,
     },
-    //Q Which role do you want to assign him/her to?
+    //this needs to be a list of all available roles
     {
       type: 'list',
-      name: 'updateRole',
+      name: 'role_id',
       message: `Which employee's role do you want to update`,
-      choices: [
-        //this needs to be a list of all available roles
-        //list of all the role
-      ],
+      choices: roleList,
     },
   ];
   inquirer.prompt(question).then((data) => {
-    askQuestion();
+    console.log(data);
+    const queryStatement = `SELECT id, first_name, last_name FROM employee`;
+    db.query(queryStatement, (err, result) => {});
+    // askQuestion();
     //Return Updated employee role
     //       SELECT * FROM employee
     // WHERE employee.manager_id IS NULL;
   });
+
+  // const question = [
+  //   {
+  //     type: 'list',
+  //     name: 'whichEmployee',
+  //     message: `Which employee's role do you want to update`,
+  //     choices: [
+  //       'view all departments',
+  //       //this needs to be a list of all employees full name
+  //     ],
+  //   },
+  //   //Q Which role do you want to assign him/her to?
+  //   {
+  //     type: 'list',
+  //     name: 'updateRole',
+  //     message: `Which employee's role do you want to update`,
+  //     choices: [
+  //       //this needs to be a list of all available roles
+  //       //list of all the role
+  //     ],
+  //   },
+  // ];
+  // inquirer.prompt(question).then((data) => {
+  //   askQuestion();
+  //   //Return Updated employee role
+  //   //       SELECT * FROM employee
+  //   // WHERE employee.manager_id IS NULL;
+  // });
 }
 
 askQuestion(true);
