@@ -48,4 +48,5 @@ As a business owner I want to be able to view and manage the department, roles, 
 ## Repo
 https://github.com/johnxlai/employee-tracker
 ## WalkThrough Video
-https://drive.google.com/file/d/1zKDm3_RNRF0xhl7HIcSfiNnQ_BCQhymY/view
+https://drive.google.com/file/d/1C44gFf2sO2jV4oR0d-8h5hM0MwM11uvS/view
+
