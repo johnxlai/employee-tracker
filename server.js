@@ -250,14 +250,14 @@ async function updateEmployeeRole() {
   });
 
   const question = [
-    //this needs to be a list of all employees
+    //list of all employees
     {
       type: 'list',
       name: 'employee_id',
       message: `Which employee's role do you want to update`,
       choices: employeeList,
     },
-    //this needs to be a list of all available roles
+    //list of all available roles
     {
       type: 'list',
       name: 'role_id',
@@ -265,8 +265,9 @@ async function updateEmployeeRole() {
       choices: roleList,
     },
   ];
-  inquirer.prompt(question).then((data) => {
-    const queryStatement = `SELECT id, first_name, last_name FROM employee`;
+  inquirer.prompt(question).then(({ employee_id, role_id }) => {
+    const queryStatement = `UPDATE employee SET role_id = ${role_id} WHERE id = ${employee_id};`;
+
     db.query(queryStatement, (err, result) => {
       if (err) {
         console.log(err);
