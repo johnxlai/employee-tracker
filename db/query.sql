@@ -13,6 +13,12 @@
 -- INNER JOIN department ON role.department_id = department.id
 -- LEFT JOIN employee manager ON employee.manager_id = manager.id;
 
+
+
+SELECT role.id AS id, role.title AS title, department.name AS department, role.salary AS salary
+FROM role
+INNER JOIN department ON role.department_id = department.id;
+
 -- SELECT employee.manager_id AS Manager FROM employee GROUP BY first_name;
 
 -- SELECT * FROM employee
@@ -31,15 +37,19 @@
 -- SELECT title FROM role;
 
 -- SELECT first_name, last_name FROM employee;
+-- SET FOREIGN_KEY_CHECKS=0; -- to disable them
 
 -- UPDATE employee
--- SET role_id = value1
--- WHERE condition;
+-- SET role_id = 12
+-- WHERE id = 2;
+
+
+
+
+-- SET FOREIGN_KEY_CHECKS=1; -- to re-enable them
 
 -- SELECT id, title FROM role
 -- WHERE title = "Advertising Manager"
 
-SELECT id, CONCAT(first_name, " " ,last_name) as name
-FROM employee
-WHERE first_name = "Tom" and last_name = 'Hanks' ;
+
 -- WHERE employee.name = "Thor Smith"

@@ -53,8 +53,9 @@ function askQuestion(isStartUp) {
           FROM department;`);
           break;
         case 'view all roles':
-          viewAll(`SELECT role.id AS id, role.title AS title, role.department_id AS department, role.salary AS salary
-      FROM role;`);
+          viewAll(`SELECT role.id AS id, role.title AS title, department.name AS department, role.salary AS salary
+FROM role
+INNER JOIN department ON role.department_id = department.id`);
           break;
 
         case 'view all employees':
@@ -121,13 +122,11 @@ function addDepartment() {
     });
   });
 }
-function addRole() {
-  db.query(`SELECT * FROM department`, (err, result) => {
-    if (err) {
-      console.log(err);
-    }
+async function addRole() {
+  try {
+    const [result] = await db.promise().query(`SELECT * FROM department`);
+
     const departmentNameArr = result.map(({ id, name }) => {
-      console.log(id, name);
       return { name, value: id };
     });
 
@@ -151,40 +150,37 @@ function addRole() {
         choices: departmentNameArr,
       },
     ];
-    inquirer.prompt(question).then((data) => {
-      const queryStatement = `INSERT INTO role SET ?`;
-      db.query(queryStatement, data, (err, result) => {
-        if (err) {
-          console.log(err);
-        }
-        console.info(`Added ${data.title} the database`);
-        askQuestion();
-      });
-    });
-  });
+
+    const data = await inquirer.prompt(question);
+    const queryStatement = `INSERT INTO role SET ?`;
+    await db.promise().query(queryStatement, data);
+
+    console.info(`Added ${data.title} the database`);
+    askQuestion();
+  } catch (err) {
+    console.log(err);
+  }
 }
 
 async function addEmployee() {
   let roleArr, managerList;
 
-  const roles = await db.promise().query(`SELECT title, id FROM role`);
+  const [roles] = await db.promise().query(`SELECT title, id FROM role`);
   //Only need the first array that gets return from the promise
-  roleArr = roles[0].map(({ title, id } = role) => {
+  roleArr = roles.map(({ title, id }) => {
     return { name: title, value: id };
   });
 
-  const managers = await db
+  const [managers] = await db
     .promise()
     .query(
       `SELECT first_name, last_name, id FROM employee WHERE employee.manager_id IS NULL`
     );
 
   //Only need the first array that gets return from the promise
-  managerList = managers[0].map(
-    ({ first_name: first, last_name: last, id } = manager) => {
-      return { name: `${first} ${last}`, value: id };
-    }
-  );
+  managerList = managers.map(({ first_name, last_name, id }) => {
+    return { name: `${first_name} ${last_name}`, value: id };
+  });
   //Add None an option
   managerList.push({ name: 'None', value: null });
 
@@ -214,20 +210,13 @@ async function addEmployee() {
       choices: managerList,
     },
   ];
-  inquirer.prompt(question).then((data) => {
-    // console.log({ first_name, last_name, role_id, manager_id });
-    const queryStatement = `INSERT INTO employee SET ?`;
-    db.query(queryStatement, data, (err, result) => {
-      if (err) {
-        console.log(err);
-      }
-      console.info(
-        `Added ${data.first_name} ${data.last_name} to the database`
-      );
+  const data = await inquirer.prompt(question);
+  const queryStatement = `INSERT INTO employee SET ?`;
+  await db.promise().query(queryStatement, data);
 
-      askQuestion();
-    });
-  });
+  console.info(`Added ${data.first_name} ${data.last_name} to the database`);
+
+  askQuestion();
 }
 
 async function updateEmployeeRole() {
@@ -268,40 +257,14 @@ async function updateEmployeeRole() {
   inquirer.prompt(question).then((data) => {
     console.log(data);
     const queryStatement = `SELECT id, first_name, last_name FROM employee`;
-    db.query(queryStatement, (err, result) => {});
-    // askQuestion();
-    //Return Updated employee role
-    //       SELECT * FROM employee
-    // WHERE employee.manager_id IS NULL;
+    db.query(queryStatement, (err, result) => {
+      if (err) {
+        console.log(err);
+      }
+      console.info(`Updated employee's role`);
+      askQuestion();
+    });
   });
-
-  // const question = [
-  //   {
-  //     type: 'list',
-  //     name: 'whichEmployee',
-  //     message: `Which employee's role do you want to update`,
-  //     choices: [
-  //       'view all departments',
-  //       //this needs to be a list of all employees full name
-  //     ],
-  //   },
-  //   //Q Which role do you want to assign him/her to?
-  //   {
-  //     type: 'list',
-  //     name: 'updateRole',
-  //     message: `Which employee's role do you want to update`,
-  //     choices: [
-  //       //this needs to be a list of all available roles
-  //       //list of all the role
-  //     ],
-  //   },
-  // ];
-  // inquirer.prompt(question).then((data) => {
-  //   askQuestion();
-  //   //Return Updated employee role
-  //   //       SELECT * FROM employee
-  //   // WHERE employee.manager_id IS NULL;
-  // });
 }
 
 askQuestion(true);
