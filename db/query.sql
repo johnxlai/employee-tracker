@@ -1,4 +1,4 @@
-
+-- this file is used for testing query
 
 -- SELECT department.id AS id, department_name AS department
 --       FROM department;
@@ -13,11 +13,9 @@
 -- INNER JOIN department ON role.department_id = department.id
 -- LEFT JOIN employee manager ON employee.manager_id = manager.id;
 
-
-
-SELECT role.id AS id, role.title AS title, department.name AS department, role.salary AS salary
-FROM role
-INNER JOIN department ON role.department_id = department.id;
+-- SELECT role.id AS id, role.title AS title, department.name AS department, role.salary AS salary
+-- FROM role
+-- INNER JOIN department ON role.department_id = department.id;
 
 -- SELECT employee.manager_id AS Manager FROM employee GROUP BY first_name;
 
@@ -44,12 +42,7 @@ INNER JOIN department ON role.department_id = department.id;
 -- WHERE id = 2;
 
 
-
-
--- SET FOREIGN_KEY_CHECKS=1; -- to re-enable them
-
 -- SELECT id, title FROM role
 -- WHERE title = "Advertising Manager"
-
 
 -- WHERE employee.name = "Thor Smith"
