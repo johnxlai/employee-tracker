@@ -7,6 +7,7 @@ require('dotenv').config();
 // call once somewhere in the beginning of the app
 const cTable = require('console.table');
 
+//my sql connection
 const db = mysql.createConnection(
   {
     host: 'localhost',
@@ -19,6 +20,7 @@ const db = mysql.createConnection(
   console.log(`Connected to the employee tracker db.`)
 );
 
+//Asking questions
 function askQuestion(isStartUp) {
   const questions = [
     {
@@ -52,19 +54,20 @@ function askQuestion(isStartUp) {
           viewAll(`SELECT department.id AS id, name AS department
           FROM department;`);
           break;
+
         case 'view all roles':
           viewAll(`SELECT role.id AS id, role.title AS title, department.name AS department, role.salary AS salary
-FROM role
-INNER JOIN department ON role.department_id = department.id`);
+          FROM role
+          INNER JOIN department ON role.department_id = department.id`);
           break;
 
         case 'view all employees':
           viewAll(`SELECT employee.id, employee.first_name, employee.last_name, role.title AS title, department.name AS department, salary, CONCAT(manager.first_name , " ", manager.last_name) as Manager
           FROM employee
-      INNER JOIN role ON employee.role_id = role.id
-    INNER JOIN department ON role.department_id = department.id
-    LEFT JOIN employee manager ON employee.manager_id = manager.id
-    ORDER BY id;`);
+          INNER JOIN role ON employee.role_id = role.id
+          INNER JOIN department ON role.department_id = department.id
+          LEFT JOIN employee manager ON employee.manager_id = manager.id
+          ORDER BY id;`);
           break;
 
         case 'add a department':
@@ -91,6 +94,7 @@ INNER JOIN department ON role.department_id = department.id`);
     .catch((err) => console.error(err));
 }
 
+//General view all results function
 function viewAll(queryStatement) {
   db.query(queryStatement, (err, result) => {
     if (err) {
@@ -100,6 +104,8 @@ function viewAll(queryStatement) {
     askQuestion();
   });
 }
+
+//Add new department
 function addDepartment() {
   const question = [
     {
@@ -122,6 +128,8 @@ function addDepartment() {
     });
   });
 }
+
+//Add new Role
 async function addRole() {
   try {
     const [result] = await db.promise().query(`SELECT * FROM department`);
@@ -162,6 +170,7 @@ async function addRole() {
   }
 }
 
+//Add new employee
 async function addEmployee() {
   let roleArr, managerList;
 
@@ -210,6 +219,7 @@ async function addEmployee() {
       choices: managerList,
     },
   ];
+
   const data = await inquirer.prompt(question);
   const queryStatement = `INSERT INTO employee SET ?`;
   await db.promise().query(queryStatement, data);
@@ -219,22 +229,23 @@ async function addEmployee() {
   askQuestion();
 }
 
+//Update employee role
 async function updateEmployeeRole() {
   const queryStatement = `SELECT id, first_name, last_name FROM employee`;
 
   let employeeList, roleList;
 
-  const employees = await db.promise().query(queryStatement);
+  //Grab employee list for inquirer choices
+  const [employees] = await db.promise().query(queryStatement);
 
-  employeeList = employees[0].map(
-    ({ id, first_name, last_name } = employee) => {
-      return { name: `${first_name} ${last_name}`, value: id };
-    }
-  );
+  employeeList = employees.map(({ id, first_name, last_name } = employee) => {
+    return { name: `${first_name} ${last_name}`, value: id };
+  });
 
-  const roles = await db.promise().query(`SELECT title, id FROM role`);
+  //Grab role list for inquirer choices
+  const [roles] = await db.promise().query(`SELECT title, id FROM role`);
 
-  roleList = roles[0].map(({ title, id }) => {
+  roleList = roles.map(({ title, id }) => {
     return { name: title, value: id };
   });
 
@@ -255,7 +266,6 @@ async function updateEmployeeRole() {
     },
   ];
   inquirer.prompt(question).then((data) => {
-    console.log(data);
     const queryStatement = `SELECT id, first_name, last_name FROM employee`;
     db.query(queryStatement, (err, result) => {
       if (err) {
@@ -267,4 +277,5 @@ async function updateEmployeeRole() {
   });
 }
 
+//Set to true on load
 askQuestion(true);
